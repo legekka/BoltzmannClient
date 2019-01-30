@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebSocketSharp;
+using System.Web.Script.Serialization;
 
 namespace BoltzmannClient
 {
@@ -11,15 +12,26 @@ namespace BoltzmannClient
     {
         public static WebSocket ws;
 
-        public wsClient()
+        public wsClient(ClientInfo clientInfo)
         {
             ws = new WebSocket("ws://localhost:9880");
             ws.OnMessage += (sender, e) =>
             {
+                string msg = e.Data;
                 Console.WriteLine("Server: " + e.Data);
             };
-            ws.Connect();
-            ws.Send("ezkelllegyen");
+            try
+            {
+                ws.Connect();
+            }
+            catch(Exception ConnectionException)
+            {
+                Console.WriteLine(ConnectionException.Data);
+            }
+
+            var json = new JavaScriptSerializer().Serialize(clientInfo);
+            ws.Send(json);
+
             Console.ReadKey(true);
         }
     }
