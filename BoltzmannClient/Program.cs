@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebSocketSharp;
 
 namespace BoltzmannClient
 {
@@ -10,6 +11,9 @@ namespace BoltzmannClient
     {
         static void Main(string[] args)
         {
+            MicroBenchmark benchmark = new MicroBenchmark();
+
+            
         }
     }
 }
