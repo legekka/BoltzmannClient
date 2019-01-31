@@ -15,6 +15,7 @@ namespace BoltzmannClient
         public static ClientInfo clientInfo;
         public static wsClient wsClient;
         public static string blenderPath;
+        public const string BlenderTaskPath = @".\Blender\";
 
         static void Main(string[] args)
         {
@@ -27,9 +28,8 @@ namespace BoltzmannClient
             wsClient = new wsClient(clientInfo);
             */
 
-            FilePacker filePacker = new FilePacker(@"H:\teszt.txt", 16);
-            filePacker.Generate();
-
+            wsClient = new wsClient(clientInfo);
+            Console.ReadLine();
         }
 
         private static string GetBlenderPath(string[] args)

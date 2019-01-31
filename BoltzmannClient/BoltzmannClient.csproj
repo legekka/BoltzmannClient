@@ -85,6 +85,9 @@
     <Error Condition="!Exists('..\packages\Costura.Fody.3.3.2\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.3.3.2\build\Costura.Fody.props'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y $(ProjectDir)Benchmark $(TargetDir)Benchmark\</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y $(ProjectDir)Benchmark $(TargetDir)Benchmark\
+if not exist $(TargetDir)Blender mkdir $(TargetDir)Blender
+
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
