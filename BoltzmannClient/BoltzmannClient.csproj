@@ -58,7 +58,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blender.cs" />
     <Compile Include="ClientInfo.cs" />
+    <Compile Include="FilePacker.cs" />
     <Compile Include="MicroBenchmark.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -15,52 +15,16 @@ namespace BoltzmannClient
         public int cpuScore = 0;
         public int gpuScore = 0;
 
-        private string blenderPath;
 
-
-        public MicroBenchmark(string[] _args)
+        public MicroBenchmark()
         {
-            blenderPath = GetBlenderPath(_args);
-
             RunCpuBenchmark();
-            RunGpuBenchmark();
-            
+            RunGpuBenchmark();   
             Console.WriteLine("cpuScore: " + cpuScore);
             Console.WriteLine("gpuScore: " + gpuScore);
         }
 
-        private string GetBlenderPath(string[] args)
-        {
-            string path = "";
-            string[] value = System.Environment.GetEnvironmentVariable("PATH").ToLower().Split(';');
-
-            int i = 0;
-            while (i < value.Length && !value[i].Contains("blender")) { i++; }
-
-            if (i == value.Length)
-            {
-                Console.WriteLine("Blender was not found in %PATH%");
-                if (args.Length < 1)
-                {
-                    Console.WriteLine("You must specify the Blender folder's path!");
-                    Console.ReadLine();
-                    Environment.Exit(200);
-                }
-                else
-                {
-                    path = args[0];
-
-                }
-            }
-            else
-            {
-                path = value[i];
-            }
-
-            if (path[path.Length - 1] != '\\')
-                path += @"\";
-            return path;
-        }
+        
 
         public int CalculateScore(int milliseconds)
         {
@@ -72,7 +36,7 @@ namespace BoltzmannClient
             Process bench_cpu = new Process();
             bench_cpu.StartInfo = new ProcessStartInfo()
             {
-                FileName = blenderPath + "blender.exe",
+                FileName = Program.blenderPath + "blender.exe",
                 Arguments = @"-b ./Benchmark/bench_cpu.blend -f 1",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -86,6 +50,7 @@ namespace BoltzmannClient
             while (!bench_cpu.StandardOutput.EndOfStream)
             {
                 string line = bench_cpu.StandardOutput.ReadLine();
+                Blender.WriteProgress(line);
                 if (line.Contains("Finished"))
                 {
                     DateTime date = DateTime.MinValue;
@@ -107,7 +72,7 @@ namespace BoltzmannClient
             Process bench_gpu = new Process();
             bench_gpu.StartInfo = new ProcessStartInfo()
             {
-                FileName = blenderPath + "blender.exe",
+                FileName = Program.blenderPath + "blender.exe",
                 Arguments = @"-b ./Benchmark/bench_gpu.blend -f 1",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -121,6 +86,7 @@ namespace BoltzmannClient
             while (!bench_gpu.StandardOutput.EndOfStream)
             {
                 string line = bench_gpu.StandardOutput.ReadLine();
+                Blender.WriteProgress(line);
                 if (line.Contains("Finished"))
                 {
                     DateTime date = DateTime.MinValue;

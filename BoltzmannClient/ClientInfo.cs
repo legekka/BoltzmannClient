@@ -12,9 +12,9 @@ namespace BoltzmannClient
         public int GpuScore;
         public bool useGPU = false;
 
-        public ClientInfo(string[] _args)
+        public ClientInfo()
         {
-            MicroBenchmark benchmark = new MicroBenchmark(_args);
+            MicroBenchmark benchmark = new MicroBenchmark();
             CpuScore = benchmark.cpuScore;
             GpuScore = benchmark.gpuScore;
             if (GpuScore > CpuScore)

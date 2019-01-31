@@ -17,8 +17,12 @@ namespace BoltzmannClient
             ws = new WebSocket("ws://localhost:9880");
             ws.OnMessage += (sender, e) =>
             {
-                string msg = e.Data;
-                Console.WriteLine("Server: " + e.Data);
+                if (!e.IsBinary) {
+                    string msg = e.Data;
+                    Console.WriteLine("Server: " + e.Data);
+                }
+                
+                
             };
             try
             {
@@ -27,6 +31,7 @@ namespace BoltzmannClient
             catch(Exception ConnectionException)
             {
                 Console.WriteLine(ConnectionException.Data);
+                Console.ReadLine();
             }
 
             var json = new JavaScriptSerializer().Serialize(clientInfo);
