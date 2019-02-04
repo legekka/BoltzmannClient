@@ -93,31 +93,39 @@ namespace BoltzmannClient
             if (percent == 100)
                 Console.Write("\n\r");
         }
-    }
 
-    class RenderSetting
-    {
-        public string FileName;
-        public string OutputPath;
-        public int Sample;
-        public int Seed;
-        public string CustomCommands;
-
-        public RenderSetting(string filename, string outputpath, int sample, int seed)
+        public static string GetBlenderPath(string[] args)
         {
-            FileName = filename;
-            OutputPath = outputpath;
-            Sample = sample;
-            Seed = seed;
-        }
+            string path = "";
+            string[] value = System.Environment.GetEnvironmentVariable("PATH").ToLower().Split(';');
+            if (value.Length == 0)
+                value = System.Environment.GetEnvironmentVariable("Path").ToLower().Split(';');
+            int i = 0;
+            while (i < value.Length && !value[i].Contains("blender")) { i++; }
 
-        public RenderSetting(string filename, string outputpath, int sample, int seed, string customcommands)
-        {
-            FileName = filename;
-            OutputPath = outputpath;
-            Sample = sample;
-            Seed = seed;
-            CustomCommands = customcommands;
+            if (i == value.Length)
+            {
+                Console.WriteLine("Blender was not found in %PATH%");
+                if (args.Length < 1)
+                {
+                    Console.WriteLine("You must specify the Blender folder's path!");
+                    Console.ReadLine();
+                    Environment.Exit(200);
+                }
+                else
+                {
+                    path = args[0];
+
+                }
+            }
+            else
+            {
+                path = value[i];
+            }
+
+            if (path[path.Length - 1] != '\\')
+                path += @"\";
+            return path;
         }
     }
 }

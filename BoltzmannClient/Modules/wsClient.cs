@@ -40,6 +40,11 @@ namespace BoltzmannClient
                                 }
                         }
                         break;
+                    case "new job":
+                        {
+
+                        }
+                        break;
                 }
             };
             try
