@@ -58,12 +58,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\FilePacket.cs" />
+    <Compile Include="Classes.cs" />
+    <Compile Include="Modules\JobHandler.cs" />
     <Compile Include="Modules\Blender.cs" />
-    <Compile Include="Classes\RenderSetting.cs" />
-    <Compile Include="Classes\ClientInfo.cs" />
     <Compile Include="Modules\FilePacker.cs" />
-    <Compile Include="Classes\Job.cs" />
     <Compile Include="Modules\MicroBenchmark.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,19 +23,21 @@ namespace BoltzmannClient
         {
             string command = BuildBatchString(renderSetting);
 
-            Console.WriteLine("Running Blender Task");
+            
             Console.WriteLine("Command: blender " + command);
             Process blender = new Process();
             blender.StartInfo = new ProcessStartInfo()
             {
                 FileName = Program.blenderPath + "blender.exe",
                 Arguments = command,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
+                UseShellExecute = true,
+                //RedirectStandardOutput = true,
                 CreateNoWindow = false
             };
+
+            Console.WriteLine("Starting Blender");
             blender.Start();
-            while (!blender.StandardOutput.EndOfStream)
+            /*while (!blender.StandardOutput.EndOfStream)
             {
                 string line = blender.StandardOutput.ReadLine();
                 WriteProgress(line);
@@ -43,9 +46,20 @@ namespace BoltzmannClient
                 {
                     Console.WriteLine("Done");
                 }
+            } 
+            */
+            blender.WaitForExit();
+            if (File.Exists(Directory.GetCurrentDirectory() + @"\Blender\" + renderSetting.OutputPath + "0001.png"))
+            {
+                Console.WriteLine(renderSetting.OutputPath + "0001.png finished.");
+                OutputPath = Directory.GetCurrentDirectory() + @"\Blender\" + renderSetting.OutputPath + "0001.png";
+                Program.JobHandler.SendResult(renderSetting, OutputPath);
             }
-            
-            Console.ReadLine();
+            else
+            {
+                Console.WriteLine("FATAL ERROR DETECTED!!! THE SYSTEM WILL DESTROY ITSELF NOW!");
+            }
+
         }
 
         private void GetOutputPath(string line)
@@ -57,8 +71,8 @@ namespace BoltzmannClient
 
         private string BuildBatchString(RenderSetting renderSetting)
         {
-            string str = "-b " + renderSetting.FileName;
-            str += " -o " + renderSetting.OutputPath;
+            string str = @"-b ./Blender/" + renderSetting.FileName;
+            str += " -o " + Directory.GetCurrentDirectory() +  @"\Blender\" + renderSetting.OutputPath;
             str += " --python-expr " + '"' + "import bpy;";
             if (ClientInfo.useGPU)
             {
@@ -92,6 +106,7 @@ namespace BoltzmannClient
             Console.Write("\rProgress: " + percent + "%");
             if (percent == 100)
                 Console.Write("\n\r");
+            
         }
 
         public static string GetBlenderPath(string[] args)

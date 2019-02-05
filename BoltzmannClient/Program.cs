@@ -16,22 +16,17 @@ namespace BoltzmannClient
         public static wsClient wsClient;
         public static string blenderPath;
         public const string BlenderTaskPath = @".\Blender\";
+        public static Blender Blender;
+        public static JobHandler JobHandler;
 
         static void Main(string[] args)
         {
-            /*Blender.GetBlenderPath(args);
-            clientInfo = new ClientInfo();
-            Console.ReadLine();
-            RenderSetting rS = new RenderSetting(@"H:\teszt.blend", @"H:\kep", 250, 2);
-            Blender blender = new Blender(clientInfo);
-            blender.RunBlenderTask(rS);
-            wsClient = new wsClient(clientInfo);
-            */
-
-            wsClient = new wsClient(clientInfo);
-            Console.ReadLine();
-        }
-
-        
+            blenderPath = Blender.GetBlenderPath(args);
+            clientInfo = new ClientInfo(400,450,true);
+            Blender = new Blender(clientInfo);
+            JobHandler = new JobHandler();
+            wsClient = new wsClient();
+            
+        } 
     }
 }

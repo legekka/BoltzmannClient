@@ -48,7 +48,6 @@ namespace BoltzmannClient
                 data.AddRange(filePackets[i].Data);
             }
             File.WriteAllBytes(path + filePackets[0].FileName, data.ToArray());
-            Console.ReadLine();
         }
     }
 }
