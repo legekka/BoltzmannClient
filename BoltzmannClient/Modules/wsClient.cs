@@ -32,6 +32,7 @@ namespace BoltzmannClient
             /*var json = new JavaScriptSerializer().Serialize(clientInfo);
             ws.Send(json);
             */
+
             Console.ReadLine();
         }
 
