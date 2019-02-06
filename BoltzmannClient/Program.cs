@@ -22,8 +22,8 @@ namespace BoltzmannClient
         static void Main(string[] args)
         {
             blenderPath = Blender.GetBlenderPath(args);
-            clientInfo = new ClientInfo(400,450,true);
-            Blender = new Blender(clientInfo);
+            //clientInfo = new ClientInfo(400,450,true);
+            clientInfo = new ClientInfo();
             JobHandler = new JobHandler();
             wsClient = new wsClient();
             

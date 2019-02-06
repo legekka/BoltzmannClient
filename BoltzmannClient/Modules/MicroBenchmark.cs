@@ -36,15 +36,15 @@ namespace BoltzmannClient
             Process bench_cpu = new Process();
             bench_cpu.StartInfo = new ProcessStartInfo()
             {
-                FileName = Program.blenderPath + "blender.exe",
+                FileName = Program.blenderPath,
                 Arguments = @"-b ./Benchmark/bench_cpu.blend -f 1",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 CreateNoWindow = false
             };
-
+            Console.WriteLine(bench_cpu.StartInfo.FileName);
+            Console.WriteLine(bench_cpu.StartInfo.Arguments);
             int milliseconds = 0;
-
             Console.WriteLine("Starting CPU benchmark...");
             bench_cpu.Start();
             while (!bench_cpu.StandardOutput.EndOfStream)
@@ -72,7 +72,7 @@ namespace BoltzmannClient
             Process bench_gpu = new Process();
             bench_gpu.StartInfo = new ProcessStartInfo()
             {
-                FileName = Program.blenderPath + "blender.exe",
+                FileName = Program.blenderPath,
                 Arguments = @"-b ./Benchmark/bench_gpu.blend -f 1",
                 UseShellExecute = false,
                 RedirectStandardOutput = true,

@@ -17,7 +17,7 @@ namespace BoltzmannClient
 
         public wsClient()
         {
-            ws = new WebSocket("ws://localhost:9880");
+            ws = new WebSocket("ws://boltzmann.tk:9880");
             ws.OnMessage += On_Message;
             try
             {
@@ -51,7 +51,7 @@ namespace BoltzmannClient
                 case "new job":
                     {
                         Job job = JsonConvert.DeserializeObject<Job>(e.Data.Split('|')[1]);
-                        Program.JobHandler.NewJob(job);
+                        JobHandler.NewJob(job);
                         Console.WriteLine("Job recieved. Job ID: " + job.JobID);
                     }
                     break;
@@ -71,9 +71,10 @@ namespace BoltzmannClient
                             {
                                 FilePacker.BuildFile(filePackets, Program.BlenderTaskPath);
                                 Console.WriteLine("File built. ");
-                                Program.JobHandler.Job.hasResources = true;
+                                filePackets = null;
+                                JobHandler.Job.hasResources = true;
                                 Console.WriteLine(filePacket.FileName + " Succesfully recieved.");
-                                Program.JobHandler.ExecuteJob();
+                                JobHandler.ExecuteJob();
                             }
                         }
                     }

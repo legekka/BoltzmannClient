@@ -10,24 +10,26 @@ namespace BoltzmannClient
 {
     class JobHandler
     {
-        public Job Job;
+        public static Job Job;
 
-        public void NewJob(Job job)
+        public static void NewJob(Job job)
         {
             Job = job;
+            Job.RenderSetting = job.RenderSetting;
+            Job.JobID = job.JobID;
+            Job.hasResources = job.hasResources;
         }
 
-        public void ExecuteJob()
+        public static void ExecuteJob()
         {
             if (Job.hasResources)
             {
                 Console.WriteLine("Executing job.");
-                Program.Blender.RunBlenderTask(Job.RenderSetting);
-                Console.WriteLine(Program.Blender.OutputPath);
+                Blender.RunBlenderTask(Job.RenderSetting);
             }
         }
 
-        public void SendResult(RenderSetting renderSetting, string outputpath)
+        public static void SendResult(RenderSetting renderSetting, string outputpath)
         {
             Result result = new Result(Job.JobID, renderSetting);
 

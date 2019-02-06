@@ -11,15 +11,12 @@ namespace BoltzmannClient
 {
     class Blender
     {
-        private ClientInfo ClientInfo;
-        public string OutputPath = "";
 
-        public Blender(ClientInfo clientInfo)
+        public Blender()
         {
-            ClientInfo = clientInfo;
         }
 
-        public void RunBlenderTask(RenderSetting renderSetting)
+        public static void RunBlenderTask(RenderSetting renderSetting)
         {
             string command = BuildBatchString(renderSetting);
 
@@ -28,13 +25,13 @@ namespace BoltzmannClient
             Process blender = new Process();
             blender.StartInfo = new ProcessStartInfo()
             {
-                FileName = Program.blenderPath + "blender.exe",
+                FileName = Program.blenderPath,
                 Arguments = command,
                 UseShellExecute = true,
                 //RedirectStandardOutput = true,
                 CreateNoWindow = false
             };
-
+            
             Console.WriteLine("Starting Blender");
             blender.Start();
             /*while (!blender.StandardOutput.EndOfStream)
@@ -52,8 +49,9 @@ namespace BoltzmannClient
             if (File.Exists(Directory.GetCurrentDirectory() + @"\Blender\" + renderSetting.OutputPath + "0001.png"))
             {
                 Console.WriteLine(renderSetting.OutputPath + "0001.png finished.");
-                OutputPath = Directory.GetCurrentDirectory() + @"\Blender\" + renderSetting.OutputPath + "0001.png";
-                Program.JobHandler.SendResult(renderSetting, OutputPath);
+                string OutputPath = Directory.GetCurrentDirectory() + @"\Blender\" + renderSetting.OutputPath + "0001.png";
+                JobHandler.SendResult(renderSetting, OutputPath);
+                Console.WriteLine(OutputPath);
             }
             else
             {
@@ -62,19 +60,12 @@ namespace BoltzmannClient
 
         }
 
-        private void GetOutputPath(string line)
-        {
-            if (!line.Contains("Saved: "))
-                return;
-            OutputPath = line.Split('\'')[1];
-        }
-
-        private string BuildBatchString(RenderSetting renderSetting)
+        private static string BuildBatchString(RenderSetting renderSetting)
         {
             string str = @"-b ./Blender/" + renderSetting.FileName;
-            str += " -o " + Directory.GetCurrentDirectory() +  @"\Blender\" + renderSetting.OutputPath;
+            str += " -o " + '"' + Directory.GetCurrentDirectory() + @"\Blender\" + renderSetting.OutputPath + '"';
             str += " --python-expr " + '"' + "import bpy;";
-            if (ClientInfo.useGPU)
+            if (Program.clientInfo.useGPU)
             {
                 str += "bpy.context.scene.cycles.device = 'GPU';";
                 str += "bpy.context.scene.render.tile_x = 256;";
@@ -138,8 +129,15 @@ namespace BoltzmannClient
                 path = value[i];
             }
 
-            if (path[path.Length - 1] != '\\')
-                path += @"\";
+            if (path.First() != '"' && path.Contains(' '))
+                path = '"' + path + '"';
+
+            if (path.Last() == '"')
+                if (path[path.Length - 2] != '\\')
+                    path = path.Insert(path.Length - 1, "\\blender.exe");
+                else
+                    if (path[path.Length - 1] != '\\')
+                    path += @"\blender.exe";
             return path;
         }
     }
